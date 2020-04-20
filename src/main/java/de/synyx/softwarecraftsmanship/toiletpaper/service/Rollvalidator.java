@@ -9,12 +9,15 @@ import static de.synyx.softwarecraftsmanship.toiletpaper.service.Condition.MINT;
 public class Rollvalidator {
 
     public boolean validate(Toiletpaper roll) {
-        if("iRoll".equals(roll.getBrand())) {
+        if(roll.getBrand().equals("iRoll")) {
             return false;
         }
-        if(roll.getLeaves() < 10 || roll.getLayerCount() < 3) {
+        if (!(roll.getLeaves() >= 10 || !(roll.getLayerCount() >= 3))) {
             return false;
         }
-        return MINT.equals(roll.getCondition());
+        if(roll.getCondition() != MINT) {
+            return false;
+        }
+        return true;
     }
 }

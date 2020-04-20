@@ -1,7 +1,7 @@
 package de.synyx.softwarecraftsmanship.toiletpaper.persistence;
 
-import org.springframework.stereotype.Repository;
+import de.synyx.softwarecraftsmanship.toiletpaper.model.Toiletpaper;
+import org.springframework.data.jpa.repository.JpaRepository;
 
-@Repository
-public class ToiletpaperRepository {
+public interface ToiletpaperRepository extends JpaRepository<Toiletpaper, Long> {
 }

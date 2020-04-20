@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
-@RestController("toiletpaper")
+@RestController
 public class ToiletpaperSharingController {
 
     ToiletpaperSharingService toiletpaperSharingService;
@@ -16,7 +16,7 @@ public class ToiletpaperSharingController {
         this.toiletpaperSharingService = toiletpaperSharingService;
     }
 
-    @GetMapping
+    @GetMapping("toiletpaper")
     public List<Toiletpaper> getAllToiletpaper() {
         return toiletpaperSharingService.getAllAvailableToiletpaper();
     }

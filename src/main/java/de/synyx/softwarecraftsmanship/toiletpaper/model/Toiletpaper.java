@@ -25,6 +25,8 @@ public class Toiletpaper {
     private String brand;
     private Condition condition;
 
+    private Long checkedOutByCustomerId;
+
     public Long getId() {
         return id;
     }
@@ -63,5 +65,13 @@ public class Toiletpaper {
 
     public void setCondition(Condition condition) {
         this.condition = condition;
+    }
+
+    public Long getCheckedOutByCustomerId() {
+        return checkedOutByCustomerId;
+    }
+
+    public void setCheckedOutByCustomerId(Long checkedOutByCustomerId) {
+        this.checkedOutByCustomerId = checkedOutByCustomerId;
     }
 }

@@ -1,7 +1,8 @@
 package de.synyx.softwarecraftsmanship.toiletpaper.service;
 
-import de.synyx.softwarecraftsmanship.customer.model.Customer;
+import de.synyx.softwarecraftsmanship.customer.exceptions.CustomerNotFoundException;
 import de.synyx.softwarecraftsmanship.customer.service.CustomerService;
+import de.synyx.softwarecraftsmanship.toiletpaper.exceptions.ToiletpaperAlreadyCheckedOutException;
 import de.synyx.softwarecraftsmanship.toiletpaper.model.Toiletpaper;
 import de.synyx.softwarecraftsmanship.toiletpaper.persistence.ToiletpaperRepository;
 
@@ -16,8 +17,9 @@ public class ToiletpaperSharingService {
 
     private CustomerService customerService;
 
-    public ToiletpaperSharingService(ToiletpaperRepository toiletpaperRepository) {
+    public ToiletpaperSharingService(ToiletpaperRepository toiletpaperRepository, CustomerService customerService) {
         this.toiletpaperRepository = toiletpaperRepository;
+        this.customerService = customerService;
     }
 
     public List<Toiletpaper> getAllAvailableToiletpaper() {
@@ -27,6 +29,19 @@ public class ToiletpaperSharingService {
     
     public void checkoutToiletpaper(Long toiletpaperId, Long customerId) {
         
-        
+        Toiletpaper toiletpaper = toiletpaperRepository.findById(toiletpaperId)
+            .orElseThrow(() -> new ToiletpaperAlreadyCheckedOutException());
+
+        if (toiletpaper.getCheckedOutByCustomerId() != null) {
+            throw new ToiletpaperAlreadyCheckedOutException();
+        }
+
+        if (!customerService.exists(customerId)) {
+            throw new CustomerNotFoundException();
+        }
+
+        toiletpaper.setCheckedOutByCustomerId(customerId);
+
+        toiletpaperRepository.save(toiletpaper);
     }
 }

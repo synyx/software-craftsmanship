@@ -3,6 +3,8 @@ package de.synyx.softwarecraftsmanship.toiletpaper.service;
 import de.synyx.softwarecraftsmanship.customer.exceptions.CustomerNotFoundException;
 import de.synyx.softwarecraftsmanship.customer.service.CustomerService;
 import de.synyx.softwarecraftsmanship.toiletpaper.exceptions.ToiletpaperAlreadyCheckedOutException;
+import de.synyx.softwarecraftsmanship.toiletpaper.exceptions.ToiletpaperNotCheckedOutException;
+import de.synyx.softwarecraftsmanship.toiletpaper.exceptions.ToiletpaperNotFoundException;
 import de.synyx.softwarecraftsmanship.toiletpaper.model.Toiletpaper;
 import de.synyx.softwarecraftsmanship.toiletpaper.persistence.ToiletpaperRepository;
 
@@ -30,7 +32,7 @@ public class ToiletpaperSharingService {
     public void checkoutToiletpaper(Long toiletpaperId, Long customerId) {
         
         Toiletpaper toiletpaper = toiletpaperRepository.findById(toiletpaperId)
-            .orElseThrow(() -> new ToiletpaperAlreadyCheckedOutException());
+            .orElseThrow(() -> new ToiletpaperNotFoundException());
 
         if (toiletpaper.getCheckedOutByCustomerId() != null) {
             throw new ToiletpaperAlreadyCheckedOutException();
@@ -44,4 +46,17 @@ public class ToiletpaperSharingService {
 
         toiletpaperRepository.save(toiletpaper);
     }
+
+	public void returnToiletpaper(Long toiletpaperId) {
+        Toiletpaper toiletpaper = toiletpaperRepository.findById(toiletpaperId)
+            .orElseThrow(() -> new ToiletpaperNotFoundException());
+
+        if (toiletpaper.getCheckedOutByCustomerId() == null) {
+            throw new ToiletpaperNotCheckedOutException();
+        }
+
+        toiletpaper.setCheckedOutByCustomerId(null);
+
+        toiletpaperRepository.save(toiletpaper);
+	}
 }
